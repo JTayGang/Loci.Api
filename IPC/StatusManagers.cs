@@ -166,6 +166,28 @@ public sealed class GetManagerInfoByName(IDalamudPluginInterface pi) : FuncSubsc
     }
 }
 
+/// <inheritdoc cref="ILociApiStatusManager.GetStatusExpiresAtByPtr" />
+public sealed class GetStatusExpiresAtByPtr(IDalamudPluginInterface pi) : FuncSubscriber<nint, List<(Guid GUID, long ExpiresAtMs)>>(pi, Label)
+{
+    /// <summary> The label. </summary>
+    public const string Label = $"Loci.{nameof(GetStatusExpiresAtByPtr)}";
+
+    /// <summary> The label as a UTF8 string. </summary>
+    public static ReadOnlySpan<byte> LabelU8 => "Loci.GetStatusExpiresAtByPtr"u8;
+
+    /// <inheritdoc cref="ILociApiStatusManager.GetStatusExpiresAtByPtr" />
+    public new List<(Guid GUID, long ExpiresAtMs)> Invoke(nint ptr)
+    {
+        return base.Invoke(ptr);
+    }
+
+    /// <summary> Create a provider. </summary>
+    public static FuncProvider<nint, List<(Guid GUID, long ExpiresAtMs)>> Provider(IDalamudPluginInterface pi, ILociApiStatusManager api)
+    {
+        return new FuncProvider<IntPtr, List<(Guid GUID, long ExpiresAtMs)>>(pi, Label, api.GetStatusExpiresAtByPtr);
+    }
+}
+
 /// <inheritdoc cref="ILociApiStatusManager.SetManager" />
 public sealed class SetManager(IDalamudPluginInterface pi) : FuncSubscriber<string, int>(pi, Label)
 {
