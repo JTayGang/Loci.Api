@@ -50,6 +50,19 @@ public interface ILociApiStatusManager
     /// <returns>The list containing all available statuses. Returns an empty list on failure.</returns>
     public List<LociStatusInfo> GetManagerInfoByName(string charaName, string buddyName);
 
+    /// <summary>
+    ///     Gets the live expiry of every active status on a manager via pointer lookup. Unlike the existing
+    ///     <c>ExpireTicks</c> field on <c>LociStatusInfo</c>, this is the actual absolute deadline the status
+    ///     was applied with, so it reflects reapplications and reads correctly for Ephemeral/remote managers too.
+    /// </summary>
+    /// <param name="ptr">the pointer address.</param>
+    /// <returns>
+    ///     The list of (GUID, ExpiresAtMs) pairs for every active status, where <c>ExpiresAtMs</c> is the absolute
+    ///     Unix-epoch-millisecond timestamp the status expires at, or <c>-1</c> if the status is permanent.
+    ///     Returns an empty list on failure.
+    /// </returns>
+    public List<(Guid GUID, long ExpiresAtMs)> GetStatusExpiresAtByPtr(nint ptr);
+    
     /// <summary>Attempt to set an actors status manager.</summary>
     /// <param name="base64Data">The status manager data to set</param>
     /// <returns>
